@@ -15,10 +15,6 @@
   "engines": {
     "node": ">= 10"
   },
-  "publishConfig": {
-    "registry": "https://registry.qatechnologysolutionsllc.com/",
-    "access": "restricted"
-  },
   "repository": "https://github.com/TravisYeah/rkd-node",
   "libc": [
     "glibc"

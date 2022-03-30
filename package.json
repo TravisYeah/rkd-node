@@ -22,9 +22,5 @@
     "test": "ava",
     "version": "napi version"
   },
-  "publishConfig": {
-    "registry": "https://registry.qatechnologysolutionsllc.com/",
-    "access": "restricted"
-  },
   "repository": "https://github.com/TravisYeah/rkd-node"
 }
