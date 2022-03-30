@@ -1,0 +1,18 @@
+[package]
+edition = "2021"
+name = "rkd-node"
+version = "0.0.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+napi = { version = "2.3.0-canary.0", default-features = false, features = ["napi4"] }
+napi-derive = "2.3.0-canary.0"
+rk-delta = { git = "https://github.com/TravisYeah/rkd", branch = "master" }
+
+[build-dependencies]
+napi-build = "1.2.1"
+
+[profile.release]
+lto = true
