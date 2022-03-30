@@ -2,23 +2,23 @@ name: CI
 env:
   DEBUG: napi:*
   APP_NAME: rkd-node
-  MACOSX_DEPLOYMENT_TARGET: '10.13'
-'on':
+  MACOSX_DEPLOYMENT_TARGET: "10.13"
+"on":
   push:
     branches:
       - main
     tags-ignore:
-      - '**'
+      - "**"
     paths-ignore:
-      - '**/*.md'
+      - "**/*.md"
       - LICENSE
-      - '**/*.gitignore'
+      - "**/*.gitignore"
       - .editorconfig
       - docs/**
   pull_request: null
 jobs:
   build:
-    if: '!contains(github.event.head_commit.message, ''skip ci'')'
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
     strategy:
       fail-fast: false
       matrix:
@@ -96,7 +96,7 @@ jobs:
         if: ${{ matrix.settings.docker }}
         with:
           image: ${{ matrix.settings.docker }}
-          options: '-v ${{ env.HOME }}/.cargo/git:/root/.cargo/git -v ${{ env.HOME }}/.cargo/registry:/root/.cargo/registry -v ${{ github.workspace }}:/build -w /build'
+          options: "-v ${{ env.HOME }}/.cargo/git:/root/.cargo/git -v ${{ env.HOME }}/.cargo/registry:/root/.cargo/registry -v ${{ github.workspace }}:/build -w /build"
           run: ${{ matrix.settings.build }}
       - name: Build
         run: ${{ matrix.settings.build }}
@@ -168,9 +168,9 @@ jobs:
           - host: windows-latest
             target: x86_64-pc-windows-msvc
         node:
-          - '12'
-          - '14'
-          - '16'
+          - "12"
+          - "14"
+          - "16"
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v3
@@ -205,9 +205,9 @@ jobs:
       fail-fast: false
       matrix:
         node:
-          - '12'
-          - '14'
-          - '16'
+          - "12"
+          - "14"
+          - "16"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -242,9 +242,9 @@ jobs:
       fail-fast: false
       matrix:
         node:
-          - '12'
-          - '14'
-          - '16'
+          - "12"
+          - "14"
+          - "16"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -310,11 +310,11 @@ jobs:
           if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --access public
+            npm publish --access restricted
           elif git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+";
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --tag next --access public
+            npm publish --tag next --access restricted
           else
             echo "Not a release, skipping publish"
           fi
