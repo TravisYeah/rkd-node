@@ -1,6 +1,6 @@
 {
-  "name": "rkd-node-win32-x64-msvc",
-  "version": "0.1.0",
+  "name": "@qatechnologysolutionsllc/rkd-node-win32-x64-msvc",
+  "version": "0.0.0",
   "os": [
     "win32"
   ],
@@ -11,8 +11,13 @@
   "files": [
     "rkd-node.win32-x64-msvc.node"
   ],
-  "license": "MIT",
+  "license": "UNLICENSED",
   "engines": {
     "node": ">= 10"
-  }
+  },
+  "publishConfig": {
+    "registry": "https://registry.qatechnologysolutionsllc.com/",
+    "access": "restricted"
+  },
+  "repository": "https://github.com/TravisYeah/rkd-node"
 }

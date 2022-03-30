@@ -1,6 +1,6 @@
 {
-  "name": "rkd-node-linux-x64-gnu",
-  "version": "0.1.0",
+  "name": "@qatechnologysolutionsllc/rkd-node-linux-x64-gnu",
+  "version": "0.0.0",
   "os": [
     "linux"
   ],
@@ -11,10 +11,15 @@
   "files": [
     "rkd-node.linux-x64-gnu.node"
   ],
-  "license": "MIT",
+  "license": "UNLICENSED",
   "engines": {
     "node": ">= 10"
   },
+  "publishConfig": {
+    "registry": "https://registry.qatechnologysolutionsllc.com/",
+    "access": "restricted"
+  },
+  "repository": "https://github.com/TravisYeah/rkd-node",
   "libc": [
     "glibc"
   ]

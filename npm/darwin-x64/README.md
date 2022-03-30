@@ -1,3 +1,3 @@
-# `rkd-node-darwin-x64`
+# `@qatechnologysolutionsllc/rkd-node-darwin-x64`
 
-This is the **x86_64-apple-darwin** binary for `rkd-node`
+This is the **x86_64-apple-darwin** binary for `@qatechnologysolutionsllc/rkd-node`

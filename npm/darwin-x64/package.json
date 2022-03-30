@@ -1,6 +1,6 @@
 {
-  "name": "rkd-node-darwin-x64",
-  "version": "0.1.0",
+  "name": "@qatechnologysolutionsllc/rkd-node-darwin-x64",
+  "version": "0.0.0",
   "os": [
     "darwin"
   ],
@@ -11,8 +11,13 @@
   "files": [
     "rkd-node.darwin-x64.node"
   ],
-  "license": "MIT",
+  "license": "UNLICENSED",
   "engines": {
     "node": ">= 10"
-  }
+  },
+  "publishConfig": {
+    "registry": "https://registry.qatechnologysolutionsllc.com/",
+    "access": "restricted"
+  },
+  "repository": "https://github.com/TravisYeah/rkd-node"
 }
