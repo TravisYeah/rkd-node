@@ -27,8 +27,6 @@ jobs:
             target: x86_64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine-zig
             build: |-
-              echo "${{ secrets.SSH_PRIVATE_KEY }}" >> /root/.ssh/id_rsa &&
-              echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config &&
               set -e &&
               rustup target add x86_64-unknown-linux-gnu &&
               yarn build --target x86_64-unknown-linux-gnu --zig --zig-abi-suffix 2.12 &&
@@ -85,7 +83,9 @@ jobs:
         with:
           image: ${{ matrix.settings.docker }}
           options: "-v ${{ env.HOME }}/.cargo/git:/root/.cargo/git -v ${{ env.HOME }}/.cargo/registry:/root/.cargo/registry -v ${{ github.workspace }}:/build -w /build"
-          run: ${{ matrix.settings.build }}
+          run: echo "${{ secrets.SSH_PRIVATE_KEY }}" >> /root/.ssh/id_rsa &&
+            echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config &&
+            ${{ matrix.settings.build }}
       - name: Build
         run: ${{ matrix.settings.build }}
         if: ${{ !matrix.settings.docker }}
