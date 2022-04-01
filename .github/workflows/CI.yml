@@ -86,7 +86,7 @@ jobs:
           run: mkdir -p /root/.ssh/ &&
             touch /root/.ssh/id_rsa &&
             echo "${{ secrets.SSH_PRIVATE_KEY }}" >> /root/.ssh/id_rsa &&
-            echo "Host github.com\n\tUser "Travis Harrison"\n\tHostname github.com\n\tIdentityFile /root/.ssh/id_rsa" >> /root/.ssh/config &&
+            echo "Host github.com\n\tUser "Travis Harrison"\n\tHostname github.com\n\tIdentityFile /root/.ssh/id_rsa\n\tHostkeyAlgorithms +ssh-rsa\n\tPubkeyAcceptedAlgorithms +ssh-rsa" >> /root/.ssh/config &&
             apk update &&
             apk add --no-cache git openssh-client &&
             ${{ matrix.settings.build }}
