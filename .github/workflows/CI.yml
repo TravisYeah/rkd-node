@@ -89,6 +89,7 @@ jobs:
             echo "Host github.com\n\tUser "Travis Harrison"\n\tHostname github.com\n\tIdentityFile /root/.ssh/id_rsa\n\tHostkeyAlgorithms +ssh-rsa\n\tPubkeyAcceptedAlgorithms +ssh-rsa" >> /root/.ssh/config &&
             apk update &&
             apk add --no-cache git openssh-client &&
+            sh-keyscan -t rsa github.com >> ~/.ssh/known_hosts &&
             ${{ matrix.settings.build }}
       - name: Build
         run: ${{ matrix.settings.build }}
