@@ -11,8 +11,9 @@
   "files": [
     "rkd-node.freebsd-x64.node"
   ],
-  "license": "MIT",
+  "license": "UNLICENSED",
   "engines": {
     "node": ">= 10"
-  }
+  },
+  "repository": "https://github.com/TravisYeah/rkd-node"
 }

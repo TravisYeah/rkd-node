@@ -11,10 +11,11 @@
   "files": [
     "rkd-node.linux-x64-musl.node"
   ],
-  "license": "MIT",
+  "license": "UNLICENSED",
   "engines": {
     "node": ">= 10"
   },
+  "repository": "https://github.com/TravisYeah/rkd-node",
   "libc": [
     "musl"
   ]
