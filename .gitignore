@@ -17,3 +17,6 @@ Cargo.lock
 node_modules
 rk-wiki-insert-p-recreated.txt
 __test__/delta
+
+index.js
+index.d.ts

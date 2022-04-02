@@ -8,7 +8,7 @@ const createPath = (p) => {
   return path.join(process.cwd(), "__test__", p);
 };
 
-test("sum from native", (t) => {
+test("create delta and recreate target", (t) => {
   const source = createPath("rk-wiki.txt");
   const target = createPath("rk-wiki-insert-p.txt");
   const delta = createPath("delta");

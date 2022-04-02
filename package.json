@@ -4,7 +4,13 @@
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {
-    "name": "rkd-node"
+    "name": "rkd-node",
+    "triples": {
+      "defaults": false,
+      "additional": [
+        "x86_64-unknown-linux-gnu"
+      ]
+    }
   },
   "license": "UNLICENSED",
   "devDependencies": {
