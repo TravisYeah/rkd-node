@@ -57,7 +57,14 @@ jobs:
           New-Item %USERPROFILE%/.ssh -ItemType "directory" &&
           New-Item %USERPROFILE%/.ssh/id_rsa &&
           echo "${{ secrets.SSH_PRIVATE_KEY }}" >> %USERPROFILE%/.ssh/id_rsa &&
-          Icacls %Key% /c /t /Remove:g "Authenticated Users" BUILTIN\Administrators BUILTIN Everyone System Users &&
+          New-Variable -Name Key -Value "$env:UserProfile\.ssh\id_rsa" &&
+          Icacls $Key /c /t /Inheritance:d &&
+          Icacls $Key /c /t /Grant ${env:UserName}:F &&
+          TakeOwn /F $Key &&
+          Icacls $Key /c /t /Grant:r ${env:UserName}:F &&
+          Icacls $Key /c /t /Remove:g Administrator "Authenticated Users" BUILTIN\Administrators BUILTIN Everyone System Users &&
+          Icacls $Key &&
+          Remove-Variable -Name Key &&
           echo "Host github.com\n\ttHostname github.com\n\tIdentityFile %USERPROFILE%/.ssh/id_rsa" >> %USERPROFILE%/.ssh/config &&
           ssh-add %USERPROFILE%/.ssh/id_rsa &&
           ssh-keyscan -t rsa github.com >> %USERPROFILE%/.ssh/known_hosts
