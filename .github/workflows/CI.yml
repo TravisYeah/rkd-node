@@ -55,7 +55,8 @@ jobs:
           New-Item %USERPROFILE%/.ssh -ItemType "directory" &&
           New-Item %USERPROFILE%/.ssh/id_rsa &&
           echo "${{ secrets.SSH_PRIVATE_KEY }}" >> %USERPROFILE%/.ssh/id_rsa &&
-          echo "Host github.com\n\ttHostname github.com\n\tIdentityFile %USERPROFILE%/.ssh/id_rsa" >> %USERPROFILE%/.ssh/config
+          echo "Host github.com\n\ttHostname github.com\n\tIdentityFile %USERPROFILE%/.ssh/id_rsa" >> %USERPROFILE%/.ssh/config &&
+          ssh-keyscan -t rsa github.com >> %USERPROFILE%/.ssh/known_hosts
       - name: Install SSH key
         if: ${{ !matrix.settings.docker && matrix.settings.host != 'windows-latest' }}
         uses: shimataro/ssh-key-action@v2
