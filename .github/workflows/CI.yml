@@ -53,7 +53,6 @@ jobs:
         if: ${{ matrix.settings.host == 'windows-latest' }}
         run: Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0 &&
           New-Item %USERPROFILE%/.ssh -ItemType "directory" &&
-          mkdir %USERPROFILE%/.ssh &&
           New-Item %USERPROFILE%/.ssh/id_rsa &&
           echo "${{ secrets.SSH_PRIVATE_KEY }}" >> %USERPROFILE%/.ssh/id_rsa &&
           echo "Host github.com\n\ttHostname github.com\n\tIdentityFile %USERPROFILE%/.ssh/id_rsa" >> %USERPROFILE%/.ssh/config
