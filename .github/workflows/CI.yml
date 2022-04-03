@@ -54,9 +54,9 @@ jobs:
         run: Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0 &&
           Set-Service -Name ssh-agent -StartupType Manual &&
           Start-Service ssh-agent &&
-          New-Item %USERPROFILE%/.ssh -ItemType "directory" &&
-          New-Item %USERPROFILE%/.ssh/id_rsa &&
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" >> %USERPROFILE%/.ssh/id_rsa &&
+          New-Item $env:UserProfile/.ssh -ItemType "directory" &&
+          New-Item $env:UserProfile/.ssh/id_rsa &&
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" >> $env:UserProfile/.ssh/id_rsa &&
           New-Variable -Name Key -Value "$env:UserProfile\.ssh\id_rsa" &&
           Icacls $Key /c /t /Inheritance:d &&
           Icacls $Key /c /t /Grant ${env:UserName}:F &&
@@ -65,9 +65,9 @@ jobs:
           Icacls $Key /c /t /Remove:g Administrator "Authenticated Users" BUILTIN\Administrators BUILTIN Everyone System Users &&
           Icacls $Key &&
           Remove-Variable -Name Key &&
-          echo "Host github.com\n\ttHostname github.com\n\tIdentityFile %USERPROFILE%/.ssh/id_rsa" >> %USERPROFILE%/.ssh/config &&
-          ssh-add %USERPROFILE%/.ssh/id_rsa &&
-          ssh-keyscan -t rsa github.com >> %USERPROFILE%/.ssh/known_hosts
+          echo "Host github.com\n\ttHostname github.com\n\tIdentityFile $env:UserProfile/.ssh/id_rsa" >> $env:UserProfile/.ssh/config &&
+          ssh-add $env:UserProfile/.ssh/id_rsa &&
+          ssh-keyscan -t rsa github.com >> $env:UserProfile/.ssh/known_hosts
       - name: Install SSH key
         if: ${{ !matrix.settings.docker && matrix.settings.host != 'windows-latest' }}
         uses: shimataro/ssh-key-action@v2
