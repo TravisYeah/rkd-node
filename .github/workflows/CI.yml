@@ -49,6 +49,26 @@ jobs:
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v3
+      - name: Install OpenSSH
+        if: ${{ matrix.settings.host == 'windows-latest' }}
+        run: | 
+          Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0 || true
+          Set-Service -Name ssh-agent -StartupType Manual || true
+          Start-Service ssh-agent || true
+          New-Item $env:UserProfile/.ssh -ItemType "directory" || true
+          New-Item $env:UserProfile/.ssh/id_rsa || true
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" >> $env:UserProfile/.ssh/id_rsa || true
+          New-Variable -Name Key -Value "$env:UserProfile\.ssh\id_rsa" || true
+          Icacls $Key /c /t /Inheritance:d || true
+          Icacls $Key /c /t /Grant ${env:UserName}:F || true
+          TakeOwn /F $Key || true
+          Icacls $Key /c /t /Grant:r ${env:UserName}:F || true
+          Icacls $Key /c /t /Remove:g Administrator "Authenticated Users" BUILTIN\Administrators BUILTIN Everyone System Users || true
+          Icacls $Key || true
+          Remove-Variable -Name Key || true
+          echo "Host github.com\n\ttHostname github.com\n\tIdentityFile $env:UserProfile/.ssh/id_rsa\n\tHostkeyAlgorithms +ssh-rsa\n\tPubkeyAcceptedAlgorithms +ssh-rsa" >> $env:UserProfile/.ssh/config || true
+          ssh-add $env:UserProfile/.ssh/id_rsa || true
+          ssh-keyscan -t rsa github.com >> $env:UserProfile/.ssh/known_hosts || true
       - name: Install SSH key
         if: ${{ !matrix.settings.docker && matrix.settings.host != 'windows-latest' }}
         uses: shimataro/ssh-key-action@v2
@@ -112,30 +132,9 @@ jobs:
             apk add --no-cache git openssh-client &&
             ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts &&
             ${{ matrix.settings.build }}
-      - name: Build in Windows
-        if: ${{ matrix.settings.host == 'windows-latest' }}
-        run: | 
-          Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0 || true
-          Set-Service -Name ssh-agent -StartupType Manual || true
-          Start-Service ssh-agent || true
-          New-Item $env:UserProfile/.ssh -ItemType "directory" || true
-          New-Item $env:UserProfile/.ssh/id_rsa || true
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" >> $env:UserProfile/.ssh/id_rsa || true
-          New-Variable -Name Key -Value "$env:UserProfile\.ssh\id_rsa" || true
-          Icacls $Key /c /t /Inheritance:d || true
-          Icacls $Key /c /t /Grant ${env:UserName}:F || true
-          TakeOwn /F $Key || true
-          Icacls $Key /c /t /Grant:r ${env:UserName}:F || true
-          Icacls $Key /c /t /Remove:g Administrator "Authenticated Users" BUILTIN\Administrators BUILTIN Everyone System Users || true
-          Icacls $Key || true
-          Remove-Variable -Name Key || true
-          echo "Host github.com\n\ttHostname github.com\n\tIdentityFile $env:UserProfile/.ssh/id_rsa\n\tHostkeyAlgorithms +ssh-rsa\n\tPubkeyAcceptedAlgorithms +ssh-rsa" >> $env:UserProfile/.ssh/config || true
-          ssh-add $env:UserProfile/.ssh/id_rsa || true
-          ssh-keyscan -t rsa github.com >> $env:UserProfile/.ssh/known_hosts || true
-          ${{ matrix.settings.build }}
       - name: Build
         run: ${{ matrix.settings.build }}
-        if: ${{ !matrix.settings.docker && matrix.settings.host != 'windows-latest' }}
+        if: ${{ !matrix.settings.docker }}
         shell: bash
       - name: Upload artifact
         uses: actions/upload-artifact@v2
