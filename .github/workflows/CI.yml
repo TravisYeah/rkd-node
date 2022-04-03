@@ -57,7 +57,7 @@ jobs:
           Start-Service ssh-agent || true
           New-Item $env:UserProfile/.ssh -ItemType "directory" || true
           New-Item $env:UserProfile/.ssh/id_rsa || true
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" >> $env:UserProfile/.ssh/id_rsa || true
+          Add-Content -Path $env:UserProfile/.ssh/id_rsa -Value '${{ secrets.SSH_PRIVATE_KEY }}'
           New-Variable -Name Key -Value "$env:UserProfile\.ssh\id_rsa" || true
           Icacls $Key /c /t /Inheritance:d || true
           Icacls $Key /c /t /Grant ${env:UserName}:F || true
@@ -66,7 +66,7 @@ jobs:
           Icacls $Key /c /t /Remove:g Administrator "Authenticated Users" BUILTIN\Administrators BUILTIN Everyone System Users || true
           Icacls $Key || true
           Remove-Variable -Name Key || true
-          echo "Host github.com\n\ttHostname github.com\n\tIdentityFile $env:UserProfile/.ssh/id_rsa" >> $env:UserProfile/.ssh/config || true
+          Add-Content -Path $env:UserProfile/.ssh/config -Value 'Host github.com\n\ttHostname github.com\n\tIdentityFile $env:UserProfile/.ssh/id_rsa'
           ssh-add $env:UserProfile/.ssh/id_rsa || true
           ssh-keyscan -t rsa github.com >> $env:UserProfile/.ssh/known_hosts || true
       - name: Install SSH key
