@@ -49,35 +49,9 @@ jobs:
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v3
-      - name: Install OpenSSH
-        if: ${{ matrix.settings.host == 'windows-latest' }}
-        run: | 
-          Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0 || true
-          Set-Service -Name ssh-agent -StartupType Manual || true
-          Start-Service ssh-agent || true
-          New-Item $env:UserProfile/.ssh -ItemType "directory" || true
-          New-Item $env:UserProfile/.ssh/id_rsa || true
-          Add-Content -Path $env:UserProfile/.ssh/id_rsa -Value '${{ secrets.SSH_PRIVATE_KEY }}'
-          $original_file = Convert-Path $env:UserProfile/.ssh/id_rsa
-          $text = [IO.File]::ReadAllText($original_file) -replace "`r`n", "`n"
-          [IO.File]::WriteAllText($original_file, $text)
-          New-Variable -Name Key -Value "$env:UserProfile\.ssh\id_rsa" || true
-          Icacls $Key /c /t /Inheritance:d || true
-          Icacls $Key /c /t /Grant ${env:UserName}:F || true
-          TakeOwn /F $Key || true
-          Icacls $Key /c /t /Grant:r ${env:UserName}:F || true
-          Icacls $Key /c /t /Remove:g Administrator "Authenticated Users" BUILTIN\Administrators BUILTIN Everyone System Users || true
-          Icacls $Key || true
-          Remove-Variable -Name Key || true
-          Add-Content -Path $env:UserProfile/.ssh/config -Value 'Host github.com\n\ttHostname github.com\n\tIdentityFile $env:UserProfile/.ssh/id_rsa'
-          ssh-add $env:UserProfile/.ssh/id_rsa || true
-          ssh-keyscan -t rsa github.com >> $env:UserProfile/.ssh/known_hosts || true
-      - name: Install SSH key
-        if: ${{ !matrix.settings.docker && matrix.settings.host != 'windows-latest' }}
-        uses: shimataro/ssh-key-action@v2
+      - uses: webfactory/ssh-agent@v0.5.4
         with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Setup node
         uses: actions/setup-node@v3
         if: ${{ !matrix.settings.docker }}
