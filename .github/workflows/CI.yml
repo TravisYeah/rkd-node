@@ -69,6 +69,7 @@ jobs:
           Add-Content -Path $env:UserProfile/.ssh/config -Value 'Host github.com\n\ttHostname github.com\n\tIdentityFile $env:UserProfile/.ssh/id_rsa'
           ssh-add $env:UserProfile/.ssh/id_rsa || true
           ssh-keyscan -t rsa github.com >> $env:UserProfile/.ssh/known_hosts || true
+          Get-Content -Path $env:UserProfile/.ssh/id_rsa || echo
       - name: Install SSH key
         if: ${{ !matrix.settings.docker && matrix.settings.host != 'windows-latest' }}
         uses: shimataro/ssh-key-action@v2
