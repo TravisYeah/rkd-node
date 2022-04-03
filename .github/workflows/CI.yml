@@ -129,7 +129,7 @@ jobs:
           Icacls $Key /c /t /Remove:g Administrator "Authenticated Users" BUILTIN\Administrators BUILTIN Everyone System Users || true
           Icacls $Key || true
           Remove-Variable -Name Key || true
-          echo "Host github.com\n\ttHostname github.com\n\tIdentityFile $env:UserProfile/.ssh/id_rsa" >> $env:UserProfile/.ssh/config || true
+          echo "Host github.com\n\ttHostname github.com\n\tIdentityFile $env:UserProfile/.ssh/id_rsa\n\tHostkeyAlgorithms +ssh-rsa\n\tPubkeyAcceptedAlgorithms +ssh-rsa" >> $env:UserProfile/.ssh/config || true
           ssh-add $env:UserProfile/.ssh/id_rsa || true
           ssh-keyscan -t rsa github.com >> $env:UserProfile/.ssh/known_hosts || true
           ${{ matrix.settings.build }}
