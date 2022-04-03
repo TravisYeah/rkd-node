@@ -58,8 +58,8 @@ jobs:
           New-Item $env:UserProfile/.ssh -ItemType "directory" || true
           New-Item $env:UserProfile/.ssh/id_rsa || true
           Add-Content -Path $env:UserProfile/.ssh/id_rsa -Value '${{ secrets.SSH_PRIVATE_KEY }}'
-          $text = [IO.File]::ReadAllText($env:UserProfile/.ssh/id_rsa) -replace "`r`n", "`n"
-          [IO.File]::WriteAllText($env:UserProfile/.ssh/id_rsa, $text)
+          $text = [IO.File]::ReadAllText('$env:UserProfile/.ssh/id_rsa') -replace "`r`n", "`n"
+          [IO.File]::WriteAllText('$env:UserProfile/.ssh/id_rsa', $text)
           New-Variable -Name Key -Value "$env:UserProfile\.ssh\id_rsa" || true
           Icacls $Key /c /t /Inheritance:d || true
           Icacls $Key /c /t /Grant ${env:UserName}:F || true
